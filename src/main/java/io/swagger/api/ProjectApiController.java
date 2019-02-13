@@ -3,6 +3,9 @@ package io.swagger.api;
 import io.swagger.model.Project;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.dao.ProjectDao;
+import io.swagger.dao.ProjectDaoImp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -47,23 +50,29 @@ public class ProjectApiController implements ProjectApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Project>> searchProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject) {
+    public ResponseEntity<Project> searchProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Project>>(objectMapper.readValue("[ {  \"idProject\" : \"1709121\",  \"name\" : \"Migracion\",  \"type\" : \"OC\",  \"status\" : \"DesarrolloOK\",  \"artifacts\" : [ {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  }, {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  } ]}, {  \"idProject\" : \"1709121\",  \"name\" : \"Migracion\",  \"type\" : \"OC\",  \"status\" : \"DesarrolloOK\",  \"artifacts\" : [ {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  }, {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  } ]} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
+            /*try {
+                //return new ResponseEntity<Project>(objectMapper.readValue("[ {  \"idProject\" : \"1709121\",  \"name\" : \"Migracion\",  \"type\" : \"OC\",  \"status\" : \"DesarrolloOK\",  \"artifacts\" : [ {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  }, {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  } ]}, {  \"idProject\" : \"1709121\",  \"name\" : \"Migracion\",  \"type\" : \"OC\",  \"status\" : \"DesarrolloOK\",  \"artifacts\" : [ {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  }, {    \"application\" : {      \"name\" : \"Migracion\",      \"idApplication\" : \"OSM\",      \"type\" : \"OSS\"    },    \"name\" : \"CartridgeTV\",    \"description\" : \"OSS\",    \"idArtifact\" : \"Cartridge\"  } ]} ]"), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Project>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+                return new ResponseEntity<Project>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }*/
         }
 
-        return new ResponseEntity<List<Project>>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Project>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> updateProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject,@ApiParam(value = "Project to update"  )  @Valid @RequestBody Project project) {
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
+
+	@Override
+	public List<Project> searchProjects() {
+		ProjectDao pdao = new ProjectDaoImp();
+		return pdao.getAllProjects();
+	}
 
 }

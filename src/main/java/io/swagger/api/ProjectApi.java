@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -49,15 +50,23 @@ public interface ProjectApi {
         method = RequestMethod.DELETE)
     ResponseEntity<Void> deleteProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject,@ApiParam(value = "Project to delete"  )  @Valid @RequestBody Project project);
 
+    @ApiOperation(value = "searches all Projects", nickname = "searchProjects", notes = "By passing in the appropriate options, you can search for available inventory in the system ", response = Project.class, responseContainer = "List", tags={ "developers","managers", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "search results matching criteria", response = Project.class, responseContainer = "List"),
+        @ApiResponse(code = 400, message = "bad input parameter") })
+    @RequestMapping(value = "/project",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    @ResponseBody List<Project> searchProjects();
 
-    @ApiOperation(value = "searches a requirements", nickname = "searchProject", notes = "By passing in the appropriate options, you can search for available inventory in the system ", response = Project.class, responseContainer = "List", tags={ "developers","managers", })
+    @ApiOperation(value = "searches a Project", nickname = "searchProject", notes = "By passing in the appropriate options, you can search for available inventory in the system ", response = Project.class, responseContainer = "List", tags={ "developers","managers", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Project.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "bad input parameter") })
     @RequestMapping(value = "/project/{idProject}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Project>> searchProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject);
+    ResponseEntity<Project> searchProject(@ApiParam(value = "pass an optional search string for looking up requirement",required=true) @PathVariable("idProject") String idProject);
 
 
     @ApiOperation(value = "update a Project", nickname = "updateProject", notes = "update a Project to the system", tags={ "admins", })
